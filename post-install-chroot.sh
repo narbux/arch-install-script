@@ -39,6 +39,7 @@ done
 
 # install extra packages
 pacman -S --noconfirm \
+    sudo \
     openssh \
     reflector \
     exa \
