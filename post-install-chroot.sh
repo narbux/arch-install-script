@@ -39,7 +39,6 @@ done
 
 # install extra packages
 pacman -S --noconfirm \
-    git \
     openssh \
     reflector \
     exa \
@@ -74,7 +73,6 @@ sed -i '/#PasswordAuthentication yes/c\PasswordAuthentication no' /etc/ssh/sshd_
 sed -i '/#PermitEmptyPasswords no/c\PermitEmptyPasswords no' /etc/ssh/sshd_config
 
 # change pacman settings
-sed -i '/#ParallelDownloads/c\ParallelDownloads' /etc/pacman.conf
 sed -i '/#VerbosePkgLists/c\VerbosePkgLists' /etc/pacman.conf
 sed -i '/#Color/a\ILoveCandy' /etc/pacman.conf
 sed -i '/#Color/c\Color' /etc/pacman.conf
