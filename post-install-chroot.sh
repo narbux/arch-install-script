@@ -21,7 +21,7 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 
-while getopts ":hb:u:" option; do:
+while getopts ":hb:u:" option; do
     case $option in
         h)
             usage
