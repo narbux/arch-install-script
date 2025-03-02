@@ -92,6 +92,18 @@ systemctl enable systemd-networkd systemd-resolved
 systemctl enable reflector.timer
 systemctl enable sshd
 
+configuki()
+{
+    sed -i '/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/c\HOOKS=(systemd autodetect microcode modconf kms keyboard sd-vconsole block filesystems fsck)' /etc/mkinitcpio.conf
+    echo 'rw' >> /etc/kernel/cmdline
+    echo 'KEYMAP=us' >> /etc/vconsole.conf
+    sed -i "/PRESETS=('default' 'fallback')/c\PRESETS=('default')" /etc/mkinitcpio.d/linux.preset
+    sed -i '/default_image/c\#default_image' /etc/mkinitcpio.d/linux.preset
+    sed -i '/#default_uki/c\default_uki="/efi/EFI/Linux/arch-linux.efi"' /etc/mkinitcpio.d/linux.preset
+    mkinitcpio -P
+    rm -rf /boot/initramfs*
+}
+
 intallgrub()
 {
     pacman -S --noconfirm grub
@@ -99,20 +111,28 @@ intallgrub()
     sed -i '/loglevel=3 quiet/c\loglevel=3 nowatchdog'
     grub-mkconfig -o /boot/grub/grub.cfg
 }
+
 installuki()
 {
     mkdir -p /efi/EFI/Linux
-    sed -i '/HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck)/c\HOOKS=(systemd autodetect microcode modconf kms keyboard sd-vconsole block filesystems fsck)' /etc/mkinitcpio.conf
-    sed -i "/PRESETS=('default' 'fallback')/c\PRESETS=('default')" /etc/mkinitcpio.d/linux.preset
-    sed -i '/default_image/c\#default_image' /etc/mkinitcpio.d/linux.preset
-    sed -i '/#default_uki/c\default_uki' /etc/mkinitcpio.d/linux.preset
-    mkinitcpio -P
+    configuki
     efibootmgr --create --disk /dev/vda --part 1 --label "Arch Linux" --loader "\EFI\Linux\arch-linux.efi" --unicode
-    rm -rf /boot/initramfs*
+    pacman -S --noconfirm sbctl
+    sbctl create-keys
+    sbctl enroll-keys -m
+    sbctl sign -s /efi/EFI/Linux/arch-linux.efi
 }
 installsystemdboot()
 {
-    echo "Installing systemd-boot not yet supported"
+    pacman -S --noconfirm sbctl
+    bootctl install
+    configuki
+    sbctl create-keys
+    sbctl enroll-keys -m
+    sbctl sign -s /efi/EFI/Linux/arch-linux.efi
+    sbctl sign -s /efi/EFI/BOOT/BOOTX64.EFI
+    sbctl sign -s /efi/EFI/systemd/systemd-bootx64.efi
+    sbctl sign -s /usr/lib/systemd/boot/efi/systemd-bootx64.efi -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed
 }
 
 case $bootloader in
