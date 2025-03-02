@@ -51,7 +51,8 @@ pacman -S --noconfirm \
     man-db \
     man-pages \
     plocate \
-    neovim
+    neovim \
+    polkit
 
 # give wheel group sudo privileges
 sed -i '/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/c\%wheel ALL=(ALL:ALL) NOPASSWD: ALL' /etc/sudoers
