@@ -124,9 +124,9 @@ installuki()
 }
 installsystemdboot()
 {
-    pacman -S --noconfirm sbctl
-    bootctl install
     configuki
+    bootctl install
+    pacman -S --noconfirm sbctl
     sbctl create-keys
     sbctl enroll-keys -m
     sbctl sign -s /efi/EFI/Linux/arch-linux.efi
@@ -141,7 +141,7 @@ case $bootloader in
     uki) # install unified kernel image
         installuki;;
     systemd-boot) # install systemd-boot
-        installssytemdboot;;
+        installsystemdboot;;
     *)
         echo "No bootloader installed";;
 esac

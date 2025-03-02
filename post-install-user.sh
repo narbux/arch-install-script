@@ -51,5 +51,3 @@ eval "$(zoxide init zsh)"
 EOF
 
 rm $HOME/.bash_logout $HOME/.bash_profile $HOME/.bashrc
-
-exit
