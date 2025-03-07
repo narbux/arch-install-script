@@ -124,8 +124,8 @@ installuki()
 }
 installsystemdboot()
 {
-    configuki
     bootctl install
+    configuki
     pacman -S --noconfirm sbctl
     sbctl create-keys
     sbctl enroll-keys -m
