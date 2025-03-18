@@ -22,6 +22,9 @@ zsh-users/zsh-completions kind:fpath path=src
 
 sindresorhus/pure kind:fpath
 
+belak/zsh-utils path:editor
+belak/zsh-utils path:history
+
 zsh-users/zsh-autosuggestions
 zdharma-continuum/fast-syntax-highlighting kind:defer
 EOF
